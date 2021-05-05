@@ -1,0 +1,10 @@
+Removed Pin From Net: NetName=NetR21_2 Pin=T3-1
+Removed Pin From Net: NetName=GND Pin=T3-2
+Added Pin To Net: NetName=L Pin=D1-1
+Added Pin To Net: NetName=GND Pin=T3-1
+Added Pin To Net: NetName=NetR21_2 Pin=T3-2
+Added Member To Class: ClassName=Sheet1 Member=Component C1 330nf
+Added Member To Class: ClassName=Sheet1 Member=Component C2 0.1uf
+Added Member To Class: ClassName=Sheet1 Member=Component R1 100R
+Added Member To Class: ClassName=Sheet1 Member=Component R3 10R
+Added Room: Name=Sheet1

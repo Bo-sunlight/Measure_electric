@@ -1,0 +1,4 @@
+Change Component Footprint: Designator=C11 Old Footprint=CAO1 New Footprint=CAO5
+Change Component Footprint: Designator=c12 Old Footprint=CAO1 New Footprint=CAO5
+Change Component Designator: OldDesignator=Q? NewDesignator=Q2
+Change Net Name : Old Net Name=NetQ?_2 New Net Name=NetQ2_2

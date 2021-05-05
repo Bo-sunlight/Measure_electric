@@ -1,0 +1,15 @@
+Removed Pin From Net: NetName=GND Pin=T3-1
+Removed Pin From Net: NetName=NetD2_1 Pin=T3-3
+Removed Member From Class: ClassName=Sheet1 Member=T3
+Added Component: Designator=Q?(TO92A)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "BOM名称"; Value = "高频放大-NPN型"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "学习资源"; Value = "https://shop463601444.taobao.com"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "属性"; Value = "40V 1.5A 1W 100MHZ"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "版权归属"; Value = "封装库来自淘宝 ID：黄晶宝石"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=Q?-1
+Added Pin To Net: NetName=NetD2_1 Pin=Q?-3
+Added Pin To Net: NetName=NetQ?_2 Pin=Q?-2
+Added Pin To Net: NetName=NetQ?_2 Pin=R21-2
+Added Net: Name=NetQ?_2
+Added Member To Class: ClassName=Sheet1 Member=Component Q? SS8050

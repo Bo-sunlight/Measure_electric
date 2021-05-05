@@ -1,0 +1,17 @@
+Added Component: Designator=J1(2.4TFT)
+Add component. Clean all parameters for all variants
+Added Pin To Net: NetName=TFT_PB9 Pin=J1-1
+Added Pin To Net: NetName=SPI2_MISO Pin=J1-2
+Added Pin To Net: NetName=SPI2_MOSI Pin=J1-3
+Added Pin To Net: NetName=SPI2_NSS Pin=J1-4
+Added Pin To Net: NetName=SPI2_SCK Pin=J1-5
+Added Pin To Net: NetName=MISO Pin=J1-6
+Added Pin To Net: NetName=LED_BACK Pin=J1-7
+Added Pin To Net: NetName=SCK Pin=J1-8
+Added Pin To Net: NetName=MOSI Pin=J1-9
+Added Pin To Net: NetName=DC Pin=J1-10
+Added Pin To Net: NetName=RST Pin=J1-11
+Added Pin To Net: NetName=CS Pin=J1-12
+Added Pin To Net: NetName=DGND Pin=J1-13
+Added Pin To Net: NetName=+5V Pin=J1-14
+Added Member To Class: ClassName=Sheet1 Member=Component J1 CON14

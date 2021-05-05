@@ -1,0 +1,33 @@
+SET PATH=C:\Keil5_MDK\ARM\ARMCC\Bin;C:\windows\system32\WBEM;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\windows\system32\WBEM;C:\Program Files\Microsoft MPI\Bin\;C:\windows\system32\WBEM;C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\windows\System32\WindowsPowerShell\v1.0\;C:\windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;c:\Program Files (x86)\Microsoft SQL Server\100\Tools\Binn\;c:\Program Files\Microsoft SQL Server\100\Tools\Binn\;c:\Program Files\Microsoft SQL Server\100\DTS\Binn\;C:\Users\86177\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Bandizip\;C:\Users\86177\.dotnet\tools;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\Microsoft SQL Server\120\DTS\Binn\;C:\Program Files (x86)\Windows Kits\8.1\Windows Performance Toolkit\;D:\MATLAB\runtime\win64;D:\MATLAB\bin;D:\MATLAB\polyspace\bin;D:\Modelsim\win64;C:\Users\86177\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Bandizip\;C:\Users\86177\.dotnet\tools;D:\Modelsim\win64
+SET CPU_TYPE=STM32F103C8
+SET CPU_VENDOR=STMicroelectronics
+SET UV2_TARGET=STM32F103_FreeRTos
+SET CPU_CLOCK=0x007A1200
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\main.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\led.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\timme.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\bsp.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\delay.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\sys.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\usart.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\core_cm3.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\stm32f10x_it.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\system_stm32f10x.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmAsm" --Via "..\obj\startup_stm32f10x_md._ia"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\misc.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\stm32f10x_gpio.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\stm32f10x_dbgmcu.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\stm32f10x_rcc.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\stm32f10x_usart.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\stm32f10x_tim.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\croutine.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\event_groups.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\list.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\queue.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\tasks.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\timers.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\port.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\heap_4.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmCC" --Via "..\obj\malloc.__i"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\ArmLink" --Via "..\OBJ\LED.lnp"
+"C:\Keil5_MDK\ARM\ARMCC\Bin\fromelf.exe" "..\OBJ\LED.axf" --i32combined --output "..\OBJ\LED.hex"

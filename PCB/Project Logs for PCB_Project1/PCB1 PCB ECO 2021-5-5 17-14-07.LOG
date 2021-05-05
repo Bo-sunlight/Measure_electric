@@ -1,0 +1,7 @@
+Added Component: Designator=SP?(M3x4_L)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "BOM名称"; Value = "铜柱"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "学习资源"; Value = "https://shop463601444.taobao.com"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "版权归属"; Value = "封装库来自淘宝 ID：黄晶宝石"; VariantName = "[No Variations]"
+Added Member To Class: ClassName=Sheet1 Member=Component SP? M3铜柱
+Added Room: Name=Sheet1

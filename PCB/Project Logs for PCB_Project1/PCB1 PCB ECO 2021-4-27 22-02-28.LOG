@@ -1,0 +1,33 @@
+Added Component: Designator=*(SOP8W_M)
+Add component. Clean all parameters for all variants
+Added Component: Designator=C1(1206)
+Add component. Clean all parameters for all variants
+Added Component: Designator=C2(1206)
+Add component. Clean all parameters for all variants
+Added Component: Designator=R1(0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=R2(0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=R3(0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=T1(ZMCT103E)
+Add component. Clean all parameters for all variants
+Added Pin To Net: NetName=GND Pin=C1-2
+Added Pin To Net: NetName=GND Pin=C2-1
+Added Pin To Net: NetName=GND Pin=R2-1
+Added Pin To Net: NetName=GND Pin=R3-1
+Added Pin To Net: NetName=GND Pin=T1-2
+Added Net: Name=GND
+Added Pin To Net: NetName=Net*_1 Pin=*-1
+Added Pin To Net: NetName=Net*_1 Pin=C1-1
+Added Pin To Net: NetName=Net*_1 Pin=R1-2
+Added Net: Name=Net*_1
+Added Pin To Net: NetName=Net*_2 Pin=*-2
+Added Pin To Net: NetName=Net*_2 Pin=C2-2
+Added Pin To Net: NetName=Net*_2 Pin=R3-2
+Added Net: Name=Net*_2
+Added Pin To Net: NetName=NetR1_1 Pin=R1-1
+Added Pin To Net: NetName=NetR1_1 Pin=R2-2
+Added Pin To Net: NetName=NetR1_1 Pin=T1-1
+Added Net: Name=NetR1_1
+Added Class: Name=Sheet1

@@ -1,0 +1,29 @@
+Added Component: Designator=J?(sip-4)
+Add component. Clean all parameters for all variants
+Added Component: Designator=J?(sip-4)
+Add component. Clean all parameters for all variants
+Added Component: Designator=J?(sip-4)
+Add component. Clean all parameters for all variants
+Added Component: Designator=J?(sip-4)
+Add component. Clean all parameters for all variants
+Added Pin To Net: NetName=+3.3V Pin=J?-1
+Added Pin To Net: NetName=+5V Pin=J?-1
+Added Pin To Net: NetName=DGND Pin=J?-1
+Added Pin To Net: NetName=GND Pin=J?-1
+Added Pin To Net: NetName=+3.3V Pin=J?-2
+Added Pin To Net: NetName=+5V Pin=J?-2
+Added Pin To Net: NetName=DGND Pin=J?-2
+Added Pin To Net: NetName=GND Pin=J?-2
+Added Pin To Net: NetName=+3.3V Pin=J?-3
+Added Pin To Net: NetName=+5V Pin=J?-3
+Added Pin To Net: NetName=DGND Pin=J?-3
+Added Pin To Net: NetName=GND Pin=J?-3
+Added Pin To Net: NetName=+3.3V Pin=J?-4
+Added Pin To Net: NetName=+5V Pin=J?-4
+Added Pin To Net: NetName=DGND Pin=J?-4
+Added Pin To Net: NetName=GND Pin=J?-4
+Added Pin To Net: NetName=DGND Pin=U1-2
+Added Member To Class: ClassName=Sheet1 Member=Component J? CON4
+Added Member To Class: ClassName=Sheet1 Member=Component J? CON4
+Added Member To Class: ClassName=Sheet1 Member=Component J? CON4
+Added Member To Class: ClassName=Sheet1 Member=Component J? CON4
