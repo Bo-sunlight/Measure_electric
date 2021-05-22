@@ -35,7 +35,6 @@
 ..\obj\mqtt_control.o: ..\HARDWARE\includes.h
 ..\obj\mqtt_control.o: ..\HARDWARE\inc\key.h
 ..\obj\mqtt_control.o: ..\HARDWARE\inc\exti.h
-..\obj\mqtt_control.o: ..\HARDWARE\inc\motor.h
 ..\obj\mqtt_control.o: ..\HARDWARE\inc\encoder.h
 ..\obj\mqtt_control.o: ..\HARDWARE\oled\oled.h
 ..\obj\mqtt_control.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
@@ -54,6 +53,7 @@
 ..\obj\mqtt_control.o: ..\HARDWARE\HLW8110\HLW8110.h
 ..\obj\mqtt_control.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\obj\mqtt_control.o: ..\HARDWARE\inc\Timer2.h
+..\obj\mqtt_control.o: ..\TFT\touch.h
 ..\obj\mqtt_control.o: ..\FreeRTOS\include\FreeRTOS.h
 ..\obj\mqtt_control.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 ..\obj\mqtt_control.o: ..\FreeRTOS\include\FreeRTOSConfig.h

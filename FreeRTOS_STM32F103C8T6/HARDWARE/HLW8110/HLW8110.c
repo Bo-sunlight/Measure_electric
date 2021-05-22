@@ -95,6 +95,8 @@ float   F_DC_P;													// A通道有功功率
 float   F_DC_E;													// A通道有功电能(量)
 float   F_DC_BACKUP_E;									          // A通道电量备份	
 float   F_DC_PF;												// 功率因素，A通道和B通道只能选其一 
+float   F_DC_SA;	 //视在功率
+float   F_DC_WF;	 //无功功率
 float   F_Angle;												// 相角，A通道和B通道只能选其一 
 
 float   F_AC_LINE_Freq;     						// 市电线性频率
@@ -521,6 +523,9 @@ void Init_HLW8110(void)
 	delay_ms(10);
 	Uart_Write_HLW8110_Reg(REG_SYSCON_ADDR,2,0x0a00);	//开启A通道，关闭B通道，电压通道PGA = 1，电流通道PGA = 1
 	delay_ms(10);
+    
+   Uart_Write_HLW8110_Reg(RmsIAOS,2,0xf8fd);	//开启A通道，关闭B通道，电压通道PGA = 1，电流通道PGA = 1
+	delay_ms(10);
 	
 //在这里改直流  0x0001为测交流，0x0071为测直流     
     if(DC_Flage == 1)
@@ -630,12 +635,13 @@ void Read_HLW8110_IA(void)
 		a = a * U16_RMSIAC_RegData;
 		a  = a/0x800000;                     //电流计算出来的浮点数单位是mA,比如5003.12 
    if(DC_Flage==1)
-		a = a/531.110;  								// 1 = 电流系数
+		a = a/490.0001;  								// 1 = 电流系数
+   
    else  
-        a = a/0.762;
+        a = a/0.153285;
 
 		a = a/1000;              //a= 5003ma,a/1000 = 5.003A,单位转换成A
-		a = a * D_CAL_A_I;				//D_CAL_A_I是校正系数，默认是1
+		a = a * 0.95;				//D_CAL_A_I是校正系数，默认是1
 		F_DC_I = a;
 	 }
 }
@@ -675,14 +681,30 @@ void Read_HLW8110_U(void)
 	{
   a =  (float)U32_RMSU_RegData;
   a = a*U16_RMSUC_RegData;  
-  a = a/0x400000;       
+  a = a/0x400000;        
 if(DC_Flage == 1)  
-  a = a/15.20;  						// 1 = 电压系数
-else
-  a = a/1.043; 
+{
+  a = a/20.10;  						// 1 = 电压系数
+  a = a/100;    				    //计算出a = 22083.12mV,a/100表示220.8312V，电压转换成V
+    
+if(a>=20)
+  a = a*0.995;			      	//D_CAL_U是校正系数，默认是1,
 
-  a = a/100;    				//计算出a = 22083.12mV,a/100表示220.8312V，电压转换成V
-  a = a*D_CAL_U;				//D_CAL_U是校正系数，默认是1,		
+else if(a<10&&a>5)
+     a = a*1.004;
+
+//else if(a<5&&a>=3)
+//  a = a*0.97;
+
+//else if(a<3)
+//  a = a*0.93;      
+}
+else 
+{
+    
+  a = a/1.063; 
+}
+
   F_DC_V = a;
 	}
 }
@@ -694,6 +716,7 @@ else
  * Return   : none
  * Record   : 2019/04/03
 ==========================================================================================================*/
+float text_data = 0.94;
 void Read_HLW8110_PA(void)
 {
 	float a;
@@ -721,23 +744,23 @@ void Read_HLW8110_PA(void)
    else
      a =  (float)U32_POWERPA_RegData;
      
-	//功率需要分正功和负功
-    //计算,U16_AC_P = (U32_POWERPA_RegData * U16_PowerPAC_RegData)/(2^31*电压系数*电流系数)
-	//单位为W,比如算出来5000.123，表示5000.123W
-	
+//功率需要分正功和负功
+//计算,U16_AC_P = (U32_POWERPA_RegData * U16_PowerPAC_RegData)/(2^31*电压系数*电流系数)
+//单位为W,比如算出来5000.123，表示5000.123W	
     a = a*U16_PowerPAC_RegData;
     a = a/0x80000000;
 if(DC_Flage == 1)
 {    
-    a = a/531.110;  										// 1 = 电流系数
-    a = a/15.20;  										// 1 = 电压系数
+    a = a/490.0001;  										// 1 = 电流系数
+    a = a/20.10;  										// 1 = 电压系数
 }
 else
 {
     a = a/0.762;  										// 1 = 电流系数
     a = a/1.043;  										// 1 = 电压系数
 }
-    a = a * D_CAL_A_P;						//D_CAL_A_P是校正系数，默认是1
+
+    a = a * text_data;						//D_CAL_A_P是校正系数，默认是1
     F_DC_P = a;									//单位为W,比如算出来5000.123，表示5000.123W
 
 }
@@ -753,7 +776,7 @@ else
 void Read_HLW8110_PF(void)
 {
 	float a;
-	//计算公式：PF = |PF|/0x7FFFF;
+	//计算公式：PF = |PF|/0x7FFFFF;
 	Uart_Read_HLW8110_Reg(REG_POWER_PS_ADDR,3);
 		delay_ms(10);
 	if ( u8_RxBuf[u8_RX_Length-1] == HLW8110_checkSum_Read(u8_RX_Length) )
@@ -764,7 +787,10 @@ void Read_HLW8110_PF(void)
 	{
 		B_Read_Error = 1;
 	}
-    a = U32_POWERPF_RegData/0x7FFFF;
+    if(U32_POWERPF_RegData>0x7ffd00)
+        a = 1;
+    else    
+        a = U32_POWERPF_RegData/0x7FFFFF;
     F_DC_PF = a;
 }
 
@@ -794,34 +820,10 @@ void Read_HLW8110_SA(void)
 		printf("A通道功率寄存器读取出错\r\n");
 		B_Read_Error = 1;
 	}
-	
-//	 if (U32_POWERPA_RegData > 0x80000000)
-//   {
-//     b = ~U32_POWERPA_RegData;
-//     a = (float)b;
-//   }
-//   else
-//     a =  (float)U32_POWERPA_RegData;
-//     
-//   
-//	//功率需要分正功和负功
-//    //计算,U16_AC_P = (U32_POWERPA_RegData * U16_PowerPAC_RegData)/(2^31*电压系数*电流系数)
-//	//单位为W,比如算出来5000.123，表示5000.123W
-//	
-//    a = a*U16_PowerPAC_RegData;
-//    a = a/0x80000000;
-//if(DC_Flage == 1)
-//{    
-//    a = a/531.110;  										// 1 = 电流系数
-//    a = a/15.20;  										// 1 = 电压系数
-//}
-//else
-//{
-//    a = a/0.762;  										// 1 = 电流系数
-//    a = a/1.043;  										// 1 = 电压系数
-//}
-//    a = a * D_CAL_A_P;						//D_CAL_A_P是校正系数，默认是1
-//    F_DC_P = a;									//单位为W,比如算出来5000.123，表示5000.123W
+    
+    a = U32_POWERSA_RegData;
+	F_DC_SA = F_DC_P/F_DC_PF;
+    F_DC_WF= sqrt(F_DC_SA*F_DC_SA-F_DC_P*F_DC_P);
 
 }
 /*=========================================================================================================
@@ -869,8 +871,8 @@ void Read_HLW8110_EA(void)
     a = a/0x20000000;             //电量单位是0.001KWH,比如算出来是2.002,表示2.002KWH    
 if(DC_Flage == 1)
 {    
-    a = a/15.20;  										// 1 = 电流系数
-    a = a/531.110;  										// 1 = 电压系数
+    a = a/490.0001;  										// 1 = 电流系数
+    a = a/20.10;  										// 1 = 电压系数
 }
 else
 {
@@ -914,6 +916,7 @@ if(DC_Flage == 1)
     a = a/100000;  										// 1 = 电流系数
     a = a/100000;  										// 1 = 电压系数
 }
+
 else
 {
     a = a*3579545;  										// 1 = 电流系数
@@ -944,44 +947,47 @@ void Calculate_HLW8110_MeterData(void)
     Read_HLW8110_Freq();             //电压频率
     Read_HLW8110_SA();               //视在功率
     Read_HLW8110_PF();              //功率因数
-	printf("\r\n");	
-	printf("\r\n");	
-   if(DC_Flage == 1)
-   {
-	   printf("直流测量,uart通讯方式\r\n");
-   }
-   else 
-       printf("交流测量,uart通讯方式\r\n");
-   
-	printf("A通道电流转换系数:%x\n " ,U16_RMSIAC_RegData);
-	printf("电压通道转换系数:%x\n " ,U16_RMSUC_RegData);
-	printf("A通道功率转换系数:%x\n " ,U16_PowerPAC_RegData);
-	printf("视在功率转换系数:%x\n " ,U16_PowerSC_RegData);
-	printf("A通道电量转换系数:%x\n " ,U16_EnergyAC_RegData);
-	printf("转换系数校验和:%x\n " ,U16_CheckSUM_RegData);
-	printf("转换系数计算出的校验和:%x\n " ,U16_CheckSUM_Data);
-	
-	printf("\r\n");//插入换行
-	printf("A通道电流寄存器:%x\n " ,U32_RMSIA_RegData);
-	printf("电压寄存器:%x\n " ,U32_RMSU_RegData);
-	printf("A通道功率寄存器:%x\n " ,U32_POWERPA_RegData);
-	printf("A通道电量寄存器:%x\n " ,U32_ENERGY_PA_RegData);
-    printf("A通道频率寄存器:%x\n " ,   U32_Freq_RegData);
-     printf("A通道视在功率寄存器:%x\n " ,U32_POWERSA_RegData);
-     printf("A通道功率因数寄存器:%x\n " ,U32_POWERPF_RegData);
-     
-	printf("\r\n");                                               //插入换行
-	printf("F_DC_I = %f A \n " ,F_DC_I);					 	//电流
-	printf("F_DC_V = %f V	\n " ,F_DC_V);					   //电压
-	printf("F_DC_P = %f W	\n " ,F_DC_P);						  //有功功率
-	printf("F_DC_BACKUP_E = %f KWH \n " ,F_DC_BACKUP_E);			//电量
-    printf("F_AC_LINE_Freq = %f Hz \n " ,F_AC_LINE_Freq);			//频率
-    printf("F_DC_PF = %f Hz \n " ,       F_DC_PF);			//功率因数
-	
-	printf("\r\n");//插入换行
-	printf("\r\n");//插入换行
-	printf("----------------------------------------------\r\n");	
-	printf("----------------------------------------------\r\n");			
+//	printf("\r\n");	
+//	printf("\r\n");	
+//   if(DC_Flage == 1)
+//   {
+//	   printf("直流测量,uart通讯方式\r\n");
+//   }
+//   else 
+//       printf("交流测量,uart通讯方式\r\n");
+//   
+//	printf("A通道电流转换系数:%x\n " ,U16_RMSIAC_RegData);
+//	printf("电压通道转换系数:%x\n " ,U16_RMSUC_RegData);
+//	printf("A通道功率转换系数:%x\n " ,U16_PowerPAC_RegData);
+//	printf("视在功率转换系数:%x\n " ,U16_PowerSC_RegData);
+//	printf("A通道电量转换系数:%x\n " ,U16_EnergyAC_RegData);
+//	printf("转换系数校验和:%x\n " ,U16_CheckSUM_RegData);
+//	printf("转换系数计算出的校验和:%x\n " ,U16_CheckSUM_Data);
+//	
+//	printf("\r\n");//插入换行
+//	printf("A通道电流寄存器:%x\n " ,U32_RMSIA_RegData);
+//	printf("电压寄存器:%x\n " ,U32_RMSU_RegData);
+//	printf("A通道功率寄存器:%x\n " ,U32_POWERPA_RegData);
+//	printf("A通道电量寄存器:%x\n " ,U32_ENERGY_PA_RegData);
+//    printf("A通道频率寄存器:%x\n " ,   U32_Freq_RegData);
+//     printf("A通道视在功率寄存器:%x\n " ,U32_POWERSA_RegData);
+//     printf("A通道功率因数寄存器:%x\n " ,U32_POWERPF_RegData);
+//     
+//	printf("\r\n");                                               //插入换行
+//	printf("F_DC_I = %f A \n " ,F_DC_I);					 	//电流
+//	printf("F_DC_V = %f V	\n " ,F_DC_V);					   //电压
+//	printf("F_DC_P = %f W	\n " ,F_DC_P);						  //有功功率
+//	printf("F_DC_BACKUP_E = %f KWH \n " ,F_DC_BACKUP_E);			//电量
+//    printf("F_AC_LINE_Freq = %f Hz \n " ,F_AC_LINE_Freq);			//频率
+//    printf("F_DC_PF = %f Hz \n " ,       F_DC_PF);			//功率因数
+//    printf("F_DC_SA = %f W \n " ,  F_DC_SA);			//视在功率 
+//    printf("F_DC_WF = %f W,\n",F_DC_WF);                           //无功功率
+//    
+//	
+//	printf("\r\n");//插入换行
+//	printf("\r\n");//插入换行
+//	printf("----------------------------------------------\r\n");	
+//	printf("----------------------------------------------\r\n");			
 }
 
 #endif

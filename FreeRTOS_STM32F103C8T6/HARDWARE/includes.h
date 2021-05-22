@@ -15,7 +15,6 @@
 #include "led.h"
 #include "key.h"
 #include "exti.h"
-#include "motor.h"
 #include "encoder.h"
 #include "oled.h"
 #include "control.h"
@@ -35,6 +34,7 @@
 
 #include "gui.h"
 #include "Timer2.h"
+#include "touch.h" 
 /*
 *********************************************************************************************************
 *                                           OS

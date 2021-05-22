@@ -1,12 +1,13 @@
 #ifndef __HLW8110_H
 #define __HLW8110_H	 
-#include "sys.h"
+#include "includes.h"
 #include "core_cm3.h"
 #include "stdio.h"
 extern u8 DC_Flage;
 extern float   F_DC_V;													// 电压有效值
 extern float   F_DC_I;													// A通道电流
 extern float   F_DC_P;													// A通道有功功率
+extern float   F_DC_SA;	 //视在功率
 extern float   F_DC_E;													// A通道有功电能(量)
 extern float   F_DC_BACKUP_E;									        // A通道电量备份	
 extern float   F_DC_PF;											     	// 功率因素，A通道和B通道只能选其一 
@@ -33,6 +34,7 @@ extern float   F_AC_LINE_Freq;     						// 市电线性频率
 
 //8112/8110 reg define
 #define REG_SYSCON_ADDR         0x00
+#define RmsIAOS                 0x0F
 #define REG_EMUCON_ADDR         0x01
 #define REG_HFCONST_ADDR        0x02
 #define REG_EMUCON2_ADDR        0x13

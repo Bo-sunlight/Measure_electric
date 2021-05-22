@@ -34,7 +34,6 @@
 ..\obj\control_interrupt.o: ..\HARDWARE\includes.h
 ..\obj\control_interrupt.o: ..\HARDWARE\inc\key.h
 ..\obj\control_interrupt.o: ..\HARDWARE\inc\exti.h
-..\obj\control_interrupt.o: ..\HARDWARE\inc\motor.h
 ..\obj\control_interrupt.o: ..\HARDWARE\inc\encoder.h
 ..\obj\control_interrupt.o: ..\HARDWARE\oled\oled.h
 ..\obj\control_interrupt.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
@@ -54,6 +53,7 @@
 ..\obj\control_interrupt.o: ..\HARDWARE\HLW8110\HLW8110.h
 ..\obj\control_interrupt.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\obj\control_interrupt.o: ..\HARDWARE\inc\Timer2.h
+..\obj\control_interrupt.o: ..\TFT\touch.h
 ..\obj\control_interrupt.o: ..\FreeRTOS\include\FreeRTOS.h
 ..\obj\control_interrupt.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 ..\obj\control_interrupt.o: ..\FreeRTOS\include\FreeRTOSConfig.h

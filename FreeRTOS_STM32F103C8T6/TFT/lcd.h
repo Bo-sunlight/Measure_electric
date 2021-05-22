@@ -80,7 +80,7 @@ extern u16  BACK_COLOR; //背景颜色.默认为白色
 #define	LCD_RS_CLR  	LCD_CTRL->BRR=LCD_RS    
 #define	LCD_SDA_CLR  	LCD_CTRL->BRR=LCD_SDA    
 #define	LCD_SCL_CLR  	LCD_CTRL->BRR=LCD_SCL    
-#define	LCD_RST_CLR  	LCD_CTRL->BRR=LCD_RST    
+#define	LCD_RST_CLR  	GPIOC->BRR=LCD_RST    
 #define	LCD_BL_CLR  	LCD_CTRL->BRR=LCD_BL 
 //////////////////////////////////////////////////////////////////////
 

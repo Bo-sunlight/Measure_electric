@@ -111,7 +111,7 @@
         <DllOption>
           <SimDllName>SARMCM3.DLL</SimDllName>
           <SimDllArguments> -REMAP</SimDllArguments>
-          <SimDlgDll>DARMSTM.DLL </SimDlgDll>
+          <SimDlgDll>DARMSTM.DLL</SimDlgDll>
           <SimDlgDllArguments>-pSTM32F103C8</SimDlgDllArguments>
           <TargetDllName>SARMCM3.DLL</TargetDllName>
           <TargetDllArguments></TargetDllArguments>
@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_MD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\USER;..\CORE;..\STM32F10x_FWLib\inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\FreeRTOS\portable\RVDS\ARM_CM3;..\FreeRTOS\include;..\HARDWARE\TIM_INIT;..\MALLOC;..\HARDWARE;..\HARDWARE\EXTI;..\HARDWARE\oled;..\HARDWARE\inc;..\TFT;..\HMAC\inc;..\MQTT;..\HARDWARE\HLW8110</IncludePath>
+              <IncludePath>..\CORE;..\FreeRTOS\include;..\FreeRTOS\portable\RVDS\ARM_CM3;..\HARDWARE\inc;..\HARDWARE;..\HARDWARE\HLW8110;..\HARDWARE\oled;..\HMAC\inc;..\MALLOC;..\MQTT;..\Project;..\STM32F10x_FWLib\inc;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\TFT;..\HARDWARE\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -431,11 +431,6 @@
               <FileName>led.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\src\led.c</FilePath>
-            </File>
-            <File>
-              <FileName>motor.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\src\motor.c</FilePath>
             </File>
             <File>
               <FileName>Control_Interrupt.c</FileName>
@@ -651,6 +646,11 @@
               <FileName>test.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\TFT\test.c</FilePath>
+            </File>
+            <File>
+              <FileName>touch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\TFT\touch.c</FilePath>
             </File>
           </Files>
         </Group>

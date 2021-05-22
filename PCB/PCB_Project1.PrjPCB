@@ -71,10 +71,6 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=IKSXFMKS
 
-[GeneratedDocument1]
-DocumentPath=
-DItemRevisionGUID=
-
 [Configuration1]
 Name=Sources
 ParameterCount=0

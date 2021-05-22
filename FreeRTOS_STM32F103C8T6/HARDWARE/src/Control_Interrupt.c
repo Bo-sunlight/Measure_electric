@@ -1,5 +1,6 @@
 #include "includes.h"
 #include "timer.h"
+#include "Timer2.h"
 /*
 *************************************
 * 函数功能：串口2中断服务函数
@@ -45,7 +46,6 @@ void USART3_IRQHandler(void)
 * 返回  值：无
 *************************************
 */
-#if  TIM2_INTERRUPT
 volatile uint32_t CPU_RunTime = 0UL;
 void TIM2_IRQHandler(void)   //TIM2中断
 {
@@ -56,7 +56,22 @@ void TIM2_IRQHandler(void)   //TIM2中断
 	}
       
 }
-#endif
+
+/*
+*************************************
+* 函数功能：TIM1中断服务函数
+* 入口参数：无
+* 返回  值：无
+*************************************
+*/
+void TIM1_IRQHandler(void)   //TIM2中断
+{
+	if (TIM_GetITStatus(TIM1, TIM_IT_Update) != RESET) //检查指定的TIM中断发生与否:TIM 中断源 
+	{
+         TIM_ClearITPendingBit(TIM1, TIM_IT_Update);
+	}
+      
+}
 
 /*
 *************************************

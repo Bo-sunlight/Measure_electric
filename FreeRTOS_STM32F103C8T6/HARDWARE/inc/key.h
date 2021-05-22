@@ -6,10 +6,10 @@
 //#define KEY2 PEin(2)	//PE2
 //#define WK_UP PAin(0)	//PA0  WK_UP
 
-#define KEY0  GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_12)//读取按键0
-#define KEY1  GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_13)//读取按键1
-#define KEY2  GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_14)//读取按键2 
-#define WK_UP   GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_15)//读取按键3(WK_UP) 
+#define KEY0  GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_11)//读取按键0
+#define KEY1  GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_12)//读取按键1
+#define KEY2  GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_15)//读取按键2 
+#define WK_UP GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_5)//读取按键3(WK_UP) 
 
 
 #define KEY0_PRES 	1	//KEY0按下

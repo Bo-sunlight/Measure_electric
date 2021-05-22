@@ -35,7 +35,6 @@
 ..\obj\openmv_data.o: ..\HARDWARE\includes.h
 ..\obj\openmv_data.o: ..\HARDWARE\inc\key.h
 ..\obj\openmv_data.o: ..\HARDWARE\inc\exti.h
-..\obj\openmv_data.o: ..\HARDWARE\inc\motor.h
 ..\obj\openmv_data.o: ..\HARDWARE\inc\encoder.h
 ..\obj\openmv_data.o: ..\HARDWARE\oled\oled.h
 ..\obj\openmv_data.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
@@ -54,6 +53,7 @@
 ..\obj\openmv_data.o: ..\HARDWARE\HLW8110\HLW8110.h
 ..\obj\openmv_data.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\obj\openmv_data.o: ..\HARDWARE\inc\Timer2.h
+..\obj\openmv_data.o: ..\TFT\touch.h
 ..\obj\openmv_data.o: ..\FreeRTOS\include\FreeRTOS.h
 ..\obj\openmv_data.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 ..\obj\openmv_data.o: ..\FreeRTOS\include\FreeRTOSConfig.h

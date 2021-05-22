@@ -4,12 +4,16 @@
 *****************************************************************
 */
 #include "includes.h"
-u8 DC_Flage = 0;
+u8 DC_Flage = 1;
+u8 star_x = 10,star_y = 120,ratio_y = 25;
+#define BIT_0	(1 << 0)
+#define BIT_1	(1 << 1)
 //任务句柄
 TaskHandle_t LED0Task_Handler; 
 TaskHandle_t KEYTask_Handler;
 TaskHandle_t CPUask_Handler;
 TaskHandle_t OLEDask_Handler;
+TaskHandle_t HLW_Handler;
 TimerHandle_t xTimers1 = {NULL};
 //信号句柄
 
@@ -19,6 +23,7 @@ void led0_task(void *pvParameters);
 void KEY_task(void *pvParameters);
 void CPU_task(void *pvParameters);
 void OLED_task(void *pvParameters);
+void HLW_task(void *pvParameters);
 void vTimerCallback(xTimerHandle pxTimer);
 
 static void AppTaskCreate (void);
@@ -72,7 +77,7 @@ void AppTaskCreate (void)
      //创建KEY任务
     xTaskCreate((TaskFunction_t )KEY_task,     
                 (const char*    )"KEY_task",   
-                (uint16_t       )256, 
+                (uint16_t       )126, 
                 (void*          )NULL,
                 (UBaseType_t    )1,
                 (TaskHandle_t*  )&KEYTask_Handler);   
@@ -82,8 +87,15 @@ void AppTaskCreate (void)
                 (const char*    )"OLED_task",   
                 (uint16_t       )512, 
                 (void*          )NULL,
-                (UBaseType_t    )5,
+                (UBaseType_t    )1,
                 (TaskHandle_t*  )&OLEDask_Handler);  
+                
+    xTaskCreate((TaskFunction_t )HLW_task,     
+                (const char*    )"HLW_task",   
+                (uint16_t       )125, 
+                (void*          )NULL,
+                (UBaseType_t    )2,
+                (TaskHandle_t*  )&HLW_Handler); 
                 
 	
 		#if 0
@@ -113,7 +125,7 @@ void AppTaskCreate (void)
 		xTimers1 = xTimerCreate("Timer", /* 定时器名字 */
 						         30, /* 定时器周期,单位时钟节拍 */
 								pdTRUE, /* 周期性 */
-								 (void *) 0, /* 定时器 ID */
+								 (void *) 0, /* 定时器 ID */                                           
                             vTimerCallback); /* 定时器回调函数 */
 													 
 			if(xTimers1 == NULL)
@@ -133,15 +145,14 @@ void AppTaskCreate (void)
 */
 void led0_task(void *pvParameters)
 {
-   char temp0[TBUFF_UNIT];
+    char temp0[TBUFF_UNIT];    
     while(1)
  {
 
 //    MQTT_Control();                             
-         
     LED0 = !LED0;
-    xTaskNotifyGive(OLEDask_Handler);           //通知LCD显示
-     
+//    xTaskNotifyGive(OLEDask_Handler);           //通知LCD显示
+
          if(SubcribePack_flag == 1)  //如果订阅成功
     {          
       sprintf(temp0,"{\"method\":\"thing.event.property.post\",\"id\":\"203302322\",\"params\":{\
@@ -153,7 +164,7 @@ void led0_task(void *pvParameters)
     }
      }
      
-         vTaskDelay(800);
+    vTaskDelay(800);
  }
 }
 
@@ -168,28 +179,73 @@ void led0_task(void *pvParameters)
   u8 key_cout;
 void KEY_task(void *pvParameters)
 {
-      Init_HLW8110();                       //Init_HLW8110初始化
 	while(1)
 	{                           
       key_cout = KEY_Scan(0);
       if(key_cout == 1)
       {
-        DC_Flage = 1;
-        Init_HLW8110();                       //Init_HLW8110初始化
+        xTaskNotify(HLW_Handler,BIT_0,eSetBits);
       }
       
-      else if(key_cout == 2)
+      else if(key_cout == 3)
       {
-       DC_Flage = 0;
-       Init_HLW8110();                       //Init_HLW8110初始化
+         xTaskNotify(HLW_Handler,BIT_1,eSetBits);
       }
-     else     
-        Calculate_HLW8110_MeterData();    
-      
-      vTaskDelay(1000);
+		tp_dev.scan(0); 	  
+      	if(tp_dev.sta&TP_PRES_DOWN)			//触摸屏被按下
+		{            
+          if(tp_dev.x<lcddev.width&&tp_dev.y<lcddev.height)
+			{	
+                 if((tp_dev.x>(star_x+15)&&tp_dev.x<(star_x+80))&&(tp_dev.y>(star_y-80)&&tp_dev.y<(star_y-45)))
+				{
+                   xTaskNotify(HLW_Handler,BIT_0,eSetBits);
+                }
+                
+                 else if((tp_dev.x>(star_x+130)&&tp_dev.x<(star_x+195))&&(tp_dev.y>(star_y-80)&&tp_dev.y<(star_y-45)))
+				{
+           xTaskNotify(HLW_Handler,BIT_1,eSetBits);
+                }               
+            }
+        }   
+            vTaskDelay(5);
     }
 }
 
+void HLW_task(void *pvParameters)
+{
+   BaseType_t xResult;
+   uint32_t ulValue;
+   Init_HLW8110();                       //Init_HLW8110初始化
+    while(1)
+    {
+      xResult = xTaskNotifyWait(0x00000000,      
+						          0xFFFFFFFF,      
+						          &ulValue,        /* 保存ulNotifiedValue到变量ulValue中 */
+						          portMAX_DELAY);  /* 最大允许延迟时间 */
+        
+      if( xResult == pdPASS )
+      {
+          /* 接收到消息，检测那个位被按下 */
+        if((ulValue & BIT_0) != 0)
+        {
+        taskENTER_CRITICAL(); //进入临界区
+        GPIO_ResetBits(GPIOB,GPIO_Pin_5);
+        DC_Flage = 1;
+        Init_HLW8110();                       //Init_HLW8110初始化
+         taskEXIT_CRITICAL(); //退出临界区
+        }
+
+        if((ulValue & BIT_1) != 0)
+        {
+             taskENTER_CRITICAL(); //进入临界区
+         GPIO_SetBits(GPIOB,GPIO_Pin_5);
+         DC_Flage = 0;
+         Init_HLW8110();                       //Init_HLW8110初始化
+           taskEXIT_CRITICAL(); //退出临界区
+        }
+		}
+    }
+}
 /*
 *********************************************************************************************************
 *	函 数 名: OLED_task
@@ -200,53 +256,74 @@ void KEY_task(void *pvParameters)
 */
 void OLED_task(void *pvParameters)
 {
-    char Buff_data[10];
-    u8 star_x = 10,star_y = 50,ratio_y = 50;
+    char Buff_data[10],parrel_data = 20;
+
     LCD_Clear(BLACK);
+    
+    Show_Str(star_x+25,star_y-70,BLUE,BLACK,"DC测量",16,1);
+     Show_Str(star_x+140,star_y-70,BLUE,BLACK,"AC测量",16,1);
     //绘制固定栏up
     LCD_Fill(0, 0,lcddev.width,30,LIGHTGRAY);
     Show_Str(50,1,BLUE,LGRAY,"电力参数测量",24,1);
 
+    Show_Str(star_x,star_y+ratio_y*6,BLUE,BLACK,"电压Frequency",16,1);    
     Show_Str(star_x,star_y+ratio_y*5,BLUE,BLACK,"电流有效值",16,1);     
     Show_Str(star_x,star_y+ratio_y*4,BLUE,BLACK,"电压有效值",16,1);
     Show_Str(star_x,star_y+ratio_y*3,BLUE,BLACK,"有功功率",16,1);
     Show_Str(star_x,star_y+ratio_y*2,BLUE,BLACK,"无功功率",16,1);
     Show_Str(star_x,star_y+ratio_y*1,BLUE,BLACK,"功率因数",16,1);
     Show_Str(star_x,star_y,BLUE,BLACK,"电能",16,1);
-
-    LCD_DrawLine(0,star_y+32,lcddev.width,star_y+32);
-    LCD_DrawLine(0,star_y+32+ratio_y*1,lcddev.width,star_y+32+ratio_y*1);
-    LCD_DrawLine(0,star_y+32+ratio_y*2,lcddev.width,star_y+32+ratio_y*2);
-    LCD_DrawLine(0,star_y+32+ratio_y*3,lcddev.width,star_y+32+ratio_y*3);
-    LCD_DrawLine(0,star_y+32+ratio_y*4,lcddev.width,star_y+32+ratio_y*4);
     
-    LCD_DrawLine(lcddev.width/2,30,lcddev.width/2,lcddev.height);
+    Show_Str(star_x+190,star_y,LIGHTGREEN,BLACK,"kw.h",16,1);
+    Show_Str(star_x+190,star_y+ratio_y*2,LIGHTGREEN,BLACK,"W",16,1);
+    Show_Str(star_x+190,star_y+ratio_y*3,LIGHTGREEN,BLACK,"W",16,1);
+    Show_Str(star_x+190,star_y+ratio_y*4,LIGHTGREEN,BLACK,"V",16,1);
+    Show_Str(star_x+190,star_y+ratio_y*5,LIGHTGREEN,BLACK,"A",16,1);
 
+    LCD_DrawLine(0,star_y+parrel_data,lcddev.width,star_y+parrel_data);                          //画线必须在写文字之后
+    LCD_DrawLine(0,star_y+parrel_data+ratio_y*1,lcddev.width,star_y+parrel_data+ratio_y*1);
+    LCD_DrawLine(0,star_y+parrel_data+ratio_y*2,lcddev.width,star_y+parrel_data+ratio_y*2);
+    LCD_DrawLine(0,star_y+parrel_data+ratio_y*3,lcddev.width,star_y+parrel_data+ratio_y*3);
+    LCD_DrawLine(0,star_y+parrel_data+ratio_y*4,lcddev.width,star_y+parrel_data+ratio_y*4);
+    LCD_DrawLine(0,star_y+parrel_data+ratio_y*5,lcddev.width,star_y+parrel_data+ratio_y*5);
+    LCD_DrawLine(0,star_y+parrel_data+ratio_y*6,lcddev.width,star_y+parrel_data+ratio_y*6);  
+    LCD_DrawLine(0,star_y+parrel_data+ratio_y*7,lcddev.width,star_y+parrel_data+ratio_y*7);
+        
+    LCD_DrawLine(lcddev.width/2,30,lcddev.width/2,lcddev.height);
+    LCD_DrawRectangle(star_x+15,star_y-80,star_x+80,star_y-45);
+    
+    LCD_DrawRectangle(star_x+130,star_y-80,star_x+195,star_y-45);
 		while(1)
 	{
-        //任务通知的 二值信号量
-      ulTaskNotifyTake(pdTRUE,  
-						 portMAX_DELAY); /* 无限等待 */
-     sprintf(Buff_data,"%5.3f kw.h",F_DC_E);//浮点型数据转为指定格式的字符串   
+    
+        
+//        //任务通知的 二值信号量
+//      ulTaskNotifyTake(pdTRUE,  
+//						 portMAX_DELAY); /* 无限等待 */
+                Calculate_HLW8110_MeterData();     	
+     sprintf(Buff_data,"%5.3f",F_DC_E);//浮点型数据转为指定格式的字符串   
      Show_Str(star_x+140,star_y,LIGHTGREEN,BLACK,(u8*)Buff_data,16,0);  
         
      sprintf(Buff_data,"%5.3f",F_DC_PF);//浮点型数据转为指定格式的字符串  
      Show_Str(star_x+140,star_y+ratio_y*1,LIGHTGREEN,BLACK,(u8*)Buff_data,16,0);  
         
-     sprintf(Buff_data,"%5.3f W",(double)0);//浮点型数据转为指定格式的字符串     
+     sprintf(Buff_data,"%5.3f",(double)0);//浮点型数据转为指定格式的字符串     
      Show_Str(star_x+140,star_y+ratio_y*2,LIGHTGREEN,BLACK,(u8*)Buff_data,16,0);  
         
-     sprintf(Buff_data,"%5.3f W",F_DC_P);//浮点型数据转为指定格式的字符串   
+     sprintf(Buff_data,"%5.3f",F_DC_P);//浮点型数据转为指定格式的字符串   
      Show_Str(star_x+140,star_y+ratio_y*3,LIGHTGREEN,BLACK,(u8*)Buff_data,16,0); 
 
-     sprintf(Buff_data,"%5.3f V",F_DC_V);//浮点型数据转为指定格式的字符串           
+     sprintf(Buff_data,"%4.3f",F_DC_V);//浮点型数据转为指定格式的字符串           
      Show_Str(star_x+140,star_y+ratio_y*4,LIGHTGREEN,BLACK,(u8*)Buff_data,16,0);  
      
-     sprintf(Buff_data,"%5.3f A",F_DC_I);//浮点型数据转为指定格式的字符串   
+     sprintf(Buff_data,"%5.4f",F_DC_I);//浮点型数据转为指定格式的字符串   
      Show_Str(star_x+140,star_y+ratio_y*5,LIGHTGREEN,BLACK,(u8*)Buff_data,16,0);  
+        
+     sprintf(Buff_data,"%5.3f",F_AC_LINE_Freq);//浮点型数据转为指定格式的字符串   
+     Show_Str(star_x+140,star_y+ratio_y*6,LIGHTGREEN,BLACK,(u8*)Buff_data,16,0);  
+     vTaskDelay(500);
 	}
 }
-
 
 /*
 *********************************************************************************************************

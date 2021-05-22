@@ -10,7 +10,7 @@ void TIM3_Int_Init(u16 arr,u16 psc)
 	
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3,ENABLE);  ///使能TIM3时钟
 	
-  TIM_TimeBaseInitStructure.TIM_Period = arr; 	//自动重装载值
+    TIM_TimeBaseInitStructure.TIM_Period = arr; 	//自动重装载值
 	TIM_TimeBaseInitStructure.TIM_Prescaler=psc;  //定时器分频
 	TIM_TimeBaseInitStructure.TIM_CounterMode=TIM_CounterMode_Up; //向上计数模式
 	TIM_TimeBaseInitStructure.TIM_ClockDivision=TIM_CKD_DIV1; 

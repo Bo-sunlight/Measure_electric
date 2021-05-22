@@ -35,7 +35,6 @@
 ..\obj\encoder.o: ..\HARDWARE\includes.h
 ..\obj\encoder.o: ..\HARDWARE\inc\key.h
 ..\obj\encoder.o: ..\HARDWARE\inc\exti.h
-..\obj\encoder.o: ..\HARDWARE\inc\motor.h
 ..\obj\encoder.o: ..\HARDWARE\inc\encoder.h
 ..\obj\encoder.o: ..\HARDWARE\oled\oled.h
 ..\obj\encoder.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
@@ -55,6 +54,7 @@
 ..\obj\encoder.o: ..\HARDWARE\HLW8110\HLW8110.h
 ..\obj\encoder.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\obj\encoder.o: ..\HARDWARE\inc\Timer2.h
+..\obj\encoder.o: ..\TFT\touch.h
 ..\obj\encoder.o: ..\FreeRTOS\include\FreeRTOS.h
 ..\obj\encoder.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 ..\obj\encoder.o: ..\FreeRTOS\include\FreeRTOSConfig.h

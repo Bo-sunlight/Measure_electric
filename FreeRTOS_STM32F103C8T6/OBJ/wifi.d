@@ -34,7 +34,6 @@
 ..\obj\wifi.o: ..\HARDWARE\includes.h
 ..\obj\wifi.o: ..\HARDWARE\inc\key.h
 ..\obj\wifi.o: ..\HARDWARE\inc\exti.h
-..\obj\wifi.o: ..\HARDWARE\inc\motor.h
 ..\obj\wifi.o: ..\HARDWARE\inc\encoder.h
 ..\obj\wifi.o: ..\HARDWARE\oled\oled.h
 ..\obj\wifi.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
@@ -54,6 +53,7 @@
 ..\obj\wifi.o: ..\HARDWARE\HLW8110\HLW8110.h
 ..\obj\wifi.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\obj\wifi.o: ..\HARDWARE\inc\Timer2.h
+..\obj\wifi.o: ..\TFT\touch.h
 ..\obj\wifi.o: ..\FreeRTOS\include\FreeRTOS.h
 ..\obj\wifi.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 ..\obj\wifi.o: ..\FreeRTOS\include\FreeRTOSConfig.h
